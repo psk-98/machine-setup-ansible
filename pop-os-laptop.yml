@@ -1,0 +1,5 @@
+---
+- name: "Setup pop os personal machine"
+  hosts: localhost
+  roles:
+    - pop-os

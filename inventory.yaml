@@ -1,0 +1,7 @@
+# machine-setup-ansible/inventory.yml
+all:
+  children:
+    local: # This group name matches 'hosts: local' in your playbook
+      hosts:
+        localhost:
+          ansible_connection: local
