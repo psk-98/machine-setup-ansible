@@ -1,0 +1,22 @@
+---
+- name: Install Virtual Box
+  apt:
+    name:
+      - virtualbox
+    state: present
+    update_cache: true
+
+- name: Add user to vboxusers group
+  user:
+    name: "{{ ansible_user_id }}"
+    group: vboxusers
+    append: true
+
+- name: Check VirtualBox version
+  ansible.builtin.command: VBoxManage --version
+  register: virtualbox_version
+  changed_when: false
+
+- name: Show VirtualBox version
+  ansible.builtin.debug:
+    msg: "VirtualBox installed: {{ virtualbox_version.stdout }}"

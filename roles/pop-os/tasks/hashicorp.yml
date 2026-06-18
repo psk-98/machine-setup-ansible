@@ -16,9 +16,8 @@
     state: present
     update_cache: yes
 
-
 - name: Install vagrant
   apt:
-     name: vagrant
-     state: present
-     update_cache: yes
+    name: vagrant
+    state: present
+    update_cache: yes
