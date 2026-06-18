@@ -5,26 +5,30 @@
     curl -fsSL https://bun.sh/install | bash
   args:
     creates: "{{ ansible_env.HOME }}/.bun/bin/bun"
+# - name: Add Bun to PATH in .bashrc
+#   lineinfile:
+#     path: "{{ ansible_env.HOME }}/.bashrc"
+#     line: 'export PATH="$HOME/.bun/bin:$PATH"'
+#     create: true
+# blockinfile:
+#   path: "{{ ansible_env.HOME }}/.bashrc"
+#   marker: "# {mark} ANSIBLE MANAGED BLOCK: Bun PATH"
+#   block: |
+#     export BUN_INSTALL="$HOME/.bun"
+#     export PATH="$BUN_INSTALL/bin:$PATH"
+#   create: true
+#   state: present
+# become: false
+# - name: Verify Bun installation
+#   command: "{{ ansible_env.HOME  }}/.bun/bin/bun --version"
+#   register: bun_version
+#   changed_when: false
+#   environment:
+#     PATH: "{{ ansible_env.HOME  }}/.bun/bin:{{ ansible_env.PATH }}"
+#     HOME: "{{ ansible_env.HOME }}" # Force HOME to /home/omen
+#     USER: "{{ ansible_user_id }}" # Force USER to omen
+#   become: false
 
-- name: Add Bun to PATH in .bashrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK: Bun PATH"
-    block: |
-      export BUN_INSTALL="$HOME/.bun"
-      export PATH="$BUN_INSTALL/bin:$PATH"
-    create: true
-    state: present
-  # become: false
-
-- name: Verify Bun installation
-  command: bun --version
-  register: bun_version
-  changed_when: false
-  environment:
-    PATH: "{{ ansible_env.HOME  }}/.bun/bin:{{ ansible_env.PATH }}"
-  become: false
-
-- name: Display Bun version
-  debug:
-    msg: "Bun installed successfully: {{ bun_version.stdout }}"
+# - name: Display Bun version
+#   debug:
+#     msg: "Bun installed successfully: {{ bun_version.stdout }}"

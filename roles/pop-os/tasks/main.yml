@@ -14,3 +14,5 @@
 - include_tasks: bun.yml
 
 - include_tasks: uv.yml
+
+- include_tasks: hashicorp.yml
