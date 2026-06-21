@@ -4,6 +4,7 @@
     name: "*"
     state: latest
   tags: updates
+  become: true
 
 - include_tasks: sudo.yml
 
