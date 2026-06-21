@@ -8,7 +8,8 @@
 - name: Add Hashicorp to apt sources
   become: true
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/hashicorp.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    # repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/hashicorp.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/hashicorp.asc] https://apt.releases.hashicorp.com nest main"
     state: present
     filename: hashicorp
 
