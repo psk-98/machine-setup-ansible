@@ -1,0 +1,35 @@
+- name: Ensure terminal config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/terminal"
+    state: directory
+    mode: "0755"
+
+- name: Add OMEN terminal ASCII banner
+  ansible.builtin.copy:
+    dest: "{{ ansible_env.HOME }}/.config/terminal/banner.txt"
+    mode: "0644"
+    content: |
+        ___   __  __  _____  _   _
+       / _ \ |  \/  || ____|| \ | |
+      | | | || |\/| ||  _|  |  \| |
+      | |_| || |  | || |___ | |\  |
+       \___/ |_|  |_||_____||_| \_|
+
+- name: Show ASCII banner when Zsh opens
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} TERMINAL ASCII BANNER"
+    insertbefore: 'eval "\$\(starship init zsh\)"'
+    block: |
+      if [[ -o interactive ]]; then
+        cat "$HOME/.config/terminal/banner.txt"
+      fi
+    create: true
+    mode: "0644"
+
+- name: Ensure Starship loads in zsh
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(starship init zsh)"'
+    create: true
+    mode: "0644"

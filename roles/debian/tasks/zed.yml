@@ -8,9 +8,9 @@
   tags:
     - zed
 
-- name: Setup alias for zed
+- name: Setup alias for zed zsh
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: 'alias zed="flatpak run dev.zed.Zed"'
     create: true
     state: present
@@ -19,6 +19,6 @@
 
 - name: Inform user to reload shell
   ansible.builtin.debug:
-    msg: "Alias created. Run 'source /home/omen/.bashrc' or restart your terminal to use 'zed'."
+    msg: "Alias created. Run 'source /home/omen/.zshrc' or restart your terminal to use 'zed'."
   tags:
     - zed

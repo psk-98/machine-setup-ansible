@@ -1,6 +1,5 @@
 ---
 - name: Install DBeaver CE
-  become: false
   community.general.flatpak:
     name: io.dbeaver.DBeaverCommunity
     method: user

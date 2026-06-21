@@ -1,0 +1,59 @@
+---
+- name: Install Zsh and useful plugins
+  become: true
+  ansible.builtin.apt:
+    name:
+      - zsh
+      - git
+      - curl
+      - zsh-autosuggestions
+      - zsh-syntax-highlighting
+    state: present
+    update_cache: true
+
+- name: Set Zsh as default shell
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+
+- name: Ensure Starship is installed
+  become: true
+  ansible.builtin.shell: |
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Ensure .zshrc exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    state: touch
+    mode: "0644"
+
+- name: Add mise to zsh
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(mise activate zsh)"'
+    create: true
+    mode: "0644"
+
+- name: Add Starship to zsh
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(starship init zsh)"'
+    create: true
+    mode: "0644"
+
+- name: Add zsh autosuggestions
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    create: true
+    mode: "0644"
+
+- name: Add zsh syntax highlighting
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    create: true
+    mode: "0644"

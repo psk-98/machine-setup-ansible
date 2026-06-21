@@ -3,10 +3,10 @@
     name: mise
     state: present
 
-- name: Activate mise for bash
+- name: Activate mise for zsh
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
-    line: 'eval "$(mise activate bash)"'
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(mise activate zsh)"'
     create: true
     mode: "0644"
     become: false

@@ -6,15 +6,15 @@
     state: present
     method: user
 
-- name: Add VS Code Flatpak alias to bashrc
+- name: Add VS Code Flatpak alias to zsh
   ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: 'alias code="flatpak run com.visualstudio.code"'
     create: true
     mode: "0644"
 
 - name: Inform user to reload shell
   ansible.builtin.debug:
-    msg: "Alias created. Run 'source /home/omen/.bashrc' or restart your terminal to use 'vscode'."
+    msg: "Alias created. Run 'source /home/omen/.bashrc' or 'source /home/omen/.zshrc' or restart your terminal to use 'vscode'."
   tags:
     - vscode
