@@ -6,4 +6,4 @@
       - app.zen_browser.zen
     state: present
     remote: flathub
-    method: user
+    method: system

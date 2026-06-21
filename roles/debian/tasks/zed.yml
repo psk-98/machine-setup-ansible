@@ -3,7 +3,7 @@
   become: true
   community.general.flatpak:
     name: dev.zed.Zed
-    method: user
+    method: system
     state: present
   tags:
     - zed

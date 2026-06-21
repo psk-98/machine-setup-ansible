@@ -5,4 +5,4 @@
       - com.usebruno.Bruno
     state: present
     remote: flathub
-    method: user
+    method: system

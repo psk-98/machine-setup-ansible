@@ -5,4 +5,4 @@
       - com.bitwarden.desktop
     state: present
     remote: flathub
-    method: user
+    method: system

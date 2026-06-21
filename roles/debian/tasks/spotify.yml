@@ -5,4 +5,4 @@
       - com.spotify.Client
     state: present
     remote: flathub
-    method: user
+    method: system

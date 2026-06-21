@@ -4,7 +4,7 @@
   community.general.flatpak:
     name: com.visualstudio.code
     state: present
-    method: user
+    method: system
 
 - name: Add VS Code Flatpak alias to zsh
   ansible.builtin.lineinfile:
