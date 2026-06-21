@@ -1,2 +1,5 @@
 ---
-- name: Install go
+- name: Install Go with mise
+  ansible.builtin.command: mise use -g go@1.23.10
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/mise/installs/go/1.23.10/bin/go"

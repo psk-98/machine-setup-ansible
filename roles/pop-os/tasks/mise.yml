@@ -1,0 +1,22 @@
+- name: Install mise
+  ansible.builtin.apt:
+    name: mise
+    state: present
+
+- name: Activate mise for bash
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: 'eval "$(mise activate bash)"'
+    create: true
+    mode: "0644"
+    become: false
+
+- name: Check mise version
+  ansible.builtin.command: mise --version
+  register: mise_version
+  changed_when: false
+  become: false
+
+- name: Show mise version
+  ansible.builtin.debug:
+    var: mise_version.stdout

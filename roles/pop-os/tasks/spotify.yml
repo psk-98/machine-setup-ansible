@@ -1,0 +1,8 @@
+---
+- name: Install spotify via flatpak
+  community.general.flatpak:
+    name:
+      - com.spotify.Client
+    state: present
+    remote: flathub
+    method: user

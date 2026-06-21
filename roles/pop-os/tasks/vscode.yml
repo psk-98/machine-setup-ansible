@@ -1,0 +1,20 @@
+---
+- name: Install VS Code via Flatpak
+  become: true
+  community.general.flatpak:
+    name: com.visualstudio.code
+    state: present
+    method: user
+
+- name: Add VS Code Flatpak alias to bashrc
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: 'alias code="flatpak run com.visualstudio.code"'
+    create: true
+    mode: "0644"
+
+- name: Inform user to reload shell
+  ansible.builtin.debug:
+    msg: "Alias created. Run 'source /home/omen/.bashrc' or restart your terminal to use 'vscode'."
+  tags:
+    - vscode

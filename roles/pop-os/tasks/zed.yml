@@ -1,6 +1,6 @@
 ---
 - name: Install Zed via Flatpak
-  become: false #no need for sudo
+  become: true
   community.general.flatpak:
     name: dev.zed.Zed
     method: user
@@ -9,9 +9,8 @@
     - zed
 
 - name: Setup alias for zed
-  become: false
   ansible.builtin.lineinfile:
-    path: "/home/omen/.bashrc"
+    path: "{{ ansible_env.HOME }}/.bashrc"
     line: 'alias zed="flatpak run dev.zed.Zed"'
     create: true
     state: present

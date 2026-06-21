@@ -1,0 +1,22 @@
+---
+- name: Clone OmenCtl
+  ansible.builtin.git:
+    repo: "https://github.com/yunusemreyl/OmenCtl.git"
+    dest: "/opt/OmenCtl"
+    version: "main"
+
+- name: Make OmenCtl installer executable
+  ansible.builtin.file:
+    path: "/opt/OmenCtl/setup.sh"
+    mode: "0755"
+
+- name: Install OmenCtl
+  ansible.builtin.shell: |
+    set -o pipefail
+    yes | ./setup.sh install
+  args:
+    chdir: "/opt/OmenCtl"
+    executable: /bin/bash
+    creates: "/usr/bin/omenctl"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
