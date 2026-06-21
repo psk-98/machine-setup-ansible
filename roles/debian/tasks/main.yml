@@ -5,6 +5,8 @@
     state: latest
   tags: updates
 
+- include_tasks: sudo.yml
+
 - include_tasks: zsh.yml
 
 - include_tasks: mise.yml
