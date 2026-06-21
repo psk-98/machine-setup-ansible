@@ -36,7 +36,7 @@
 
 - include_tasks: notesnook.yml
 
-- include_tasks: omen.yml
+# - include_tasks: omen.yml
 
 - include_tasks: spotify.yml
 
