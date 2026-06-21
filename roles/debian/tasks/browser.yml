@@ -1,0 +1,9 @@
+---
+- name: Install brave and zen via flatpak
+  community.general.flatpak:
+    name:
+      - com.brave.Browser
+      - app.zen_browser.zen
+    state: present
+    remote: flathub
+    method: user

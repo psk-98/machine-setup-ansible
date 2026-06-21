@@ -1,0 +1,5 @@
+---
+- name: "Setup debian personal machine"
+  hosts: localhost
+  roles:
+    - debian

@@ -1,0 +1,22 @@
+- name: Install mise
+  ansible.builtin.apt:
+    name: mise
+    state: present
+
+- name: Activate mise for zsh
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'eval "$(mise activate zsh)"'
+    create: true
+    mode: "0644"
+    become: false
+
+- name: Check mise version
+  ansible.builtin.command: mise --version
+  register: mise_version
+  changed_when: false
+  become: false
+
+- name: Show mise version
+  ansible.builtin.debug:
+    var: mise_version.stdout

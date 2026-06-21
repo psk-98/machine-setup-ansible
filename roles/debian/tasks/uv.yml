@@ -1,0 +1,6 @@
+---
+- name: Download and run uv install script
+  shell: |
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    creates: "{{ ansible_env.HOME }}/.uv/bin/uv"

@@ -1,0 +1,18 @@
+---
+- name: Update and upgrade
+  package:
+    name: "*"
+    state: latest
+  tags: updates
+
+- include_tasks: zed.yml
+
+- include_tasks: dbbeaver.yml
+
+# - include_tasks: docker.yml
+
+- include_tasks: bun.yml
+
+- include_tasks: uv.yml
+
+- include_tasks: hashicorp.yml

@@ -1,0 +1,9 @@
+---
+- name: Install notesnook via flatpak
+  community.general.flatpak:
+    name:
+      - com.notesnook.Notesnook
+      - app.zen_browser.zen
+    state: present
+    remote: flathub
+    method: user

@@ -1,0 +1,8 @@
+---
+- name: Install DBeaver CE
+  community.general.flatpak:
+    name: io.dbeaver.DBeaverCommunity
+    method: user
+    state: present
+  tags:
+    - dbeaver

@@ -1,0 +1,22 @@
+---
+- name: Check if Bun is already installed
+  ansible.builtin.command: bash -lc 'command -v bun'
+  register: bun_check
+  changed_when: false
+  failed_when: false
+
+- name: Install Bun with mise
+  ansible.builtin.shell: |
+    mise use -g bun@latest
+  args:
+    executable: /bin/bash
+  when: bun_check.rc != 0
+
+- name: Verify Bun
+  ansible.builtin.command: bash -lc 'bun --version'
+  register: bun_version
+  changed_when: false
+
+- name: Show Bun version
+  ansible.builtin.debug:
+    var: bun_version.stdout
