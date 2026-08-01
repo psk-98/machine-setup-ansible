@@ -24,7 +24,7 @@
   environment:
     HOME: "{{ ansible_user }}"
   become: true
-  become_user: "{{ ansible_euser }}"
+  become_user: "{{ ansible_user }}"
   when: not bun_binary.stat.exists
 
 - name: Add Bun environment variables to Zsh
