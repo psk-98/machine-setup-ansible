@@ -18,7 +18,7 @@
 
 - include_tasks: bruno.yml
 
-# - include_tasks: bun.yml
+- include_tasks: bun.yml
 
 - include_tasks: dbbeaver.yml
 
