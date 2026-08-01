@@ -12,15 +12,15 @@
 
 - include_tasks: mise.yml
 
-- include_tasks: bitwarden.yml
+# - include_tasks: bitwarden.yml
 
-- include_tasks: browser.yml
+# - include_tasks: browser.yml
 
-- include_tasks: bruno.yml
+# - include_tasks: bruno.yml
 
 - include_tasks: bun.yml
 
-- include_tasks: dbbeaver.yml
+# - include_tasks: dbbeaver.yml
 
 # - include_tasks: docker.yml
 
@@ -34,18 +34,17 @@
 
 # - include_tasks: laravel83php.yml
 
-- include_tasks: notesnook.yml
+# - include_tasks: notesnook.yml
 
 # - include_tasks: omen.yml
 
-- include_tasks: spotify.yml
+# - include_tasks: spotify.yml
 
 - include_tasks: ssh.yml
 
 - include_tasks: uv.yml
-
 # - include_tasks: virtualbox.yml
 
-- include_tasks: vscode.yml
+# - include_tasks: vscode.yml
 
-- include_tasks: zed.yml
+# - include_tasks: zed.yml
