@@ -12,6 +12,8 @@
 
 - include_tasks: mise.yml
 
+- include_tasks: flatpak.yml
+
 - include_tasks: bitwarden.yml
 
 - include_tasks: browser.yml

@@ -1,0 +1,45 @@
+---
+- name: Install Flatpak
+  ansible.builtin.apt:
+    name:
+      - flatpak
+    state: present
+    update_cache: true
+  become: true
+
+- name: Check configured system Flatpak remotes
+  ansible.builtin.command:
+    cmd: flatpak remotes --system --columns=name
+  register: flatpak_remotes
+  changed_when: false
+
+- name: Add Flathub system repository
+  ansible.builtin.command:
+    cmd: >-
+      flatpak remote-add
+      --system
+      --if-not-exists
+      flathub
+      https://dl.flathub.org/repo/flathub.flatpakrepo
+  become: true
+  when: "'flathub' not in flatpak_remotes.stdout_lines"
+
+- name: Verify Flatpak version
+  ansible.builtin.command:
+    cmd: flatpak --version
+  register: flatpak_version
+  changed_when: false
+
+- name: Display Flatpak version
+  ansible.builtin.debug:
+    msg: "{{ flatpak_version.stdout }}"
+
+- name: Verify Flathub repository
+  ansible.builtin.command:
+    cmd: flatpak remotes --system
+  register: configured_flatpak_remotes
+  changed_when: false
+
+- name: Display configured Flatpak remotes
+  ansible.builtin.debug:
+    var: configured_flatpak_remotes.stdout_lines
