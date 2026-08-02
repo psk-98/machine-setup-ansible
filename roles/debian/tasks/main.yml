@@ -30,6 +30,8 @@
 
 - include_tasks: go.yml
 
+- include_tasks: ghostty.yml
+
 - include_tasks: hashicorp.yml
 
 - include_tasks: laravel83php.yml
@@ -45,6 +47,6 @@
 - include_tasks: uv.yml
 # - include_tasks: virtualbox.yml
 
-# - include_tasks: vscode.yml
+- include_tasks: vscode.yml
 
-# - include_tasks: zed.yml
+- include_tasks: zed.yml
