@@ -1,22 +1,26 @@
 ---
 - name: Download Hashicorp GnuPG key
+  become: true
   get_url:
     url: https://apt.releases.hashicorp.com/gpg
     dest: /etc/apt/trusted.gpg.d/hashicorp.asc
 
 - name: Add Hashicorp to apt sources
+  become: true
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/hashicorp.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
     state: present
     filename: hashicorp
 
 - name: Install terraform
+  become: true
   apt:
     name: terraform
     state: present
     update_cache: yes
 
 - name: Install vagrant
+  become: true
   apt:
     name: vagrant
     state: present

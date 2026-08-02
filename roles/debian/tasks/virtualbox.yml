@@ -1,5 +1,6 @@
 ---
 - name: Install Virtual Box
+  become: true
   apt:
     name:
       - virtualbox
@@ -7,6 +8,7 @@
     update_cache: true
 
 - name: Add user to vboxusers group
+  become: true
   user:
     name: "{{ ansible_user_id }}"
     group: vboxusers

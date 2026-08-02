@@ -1,16 +1,19 @@
 ---
 - name: Clone OmenCtl
+  become: true
   ansible.builtin.git:
     repo: "https://github.com/yunusemreyl/OmenCtl.git"
     dest: "/opt/OmenCtl"
     version: "main"
 
 - name: Make OmenCtl installer executable
+  become: true
   ansible.builtin.file:
     path: "/opt/OmenCtl/setup.sh"
     mode: "0755"
 
 - name: Install OmenCtl
+  become: true
   ansible.builtin.shell: |
     set -o pipefail
     yes | ./setup.sh install

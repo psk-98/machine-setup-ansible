@@ -1,24 +1,50 @@
 ---
-- name: Install Zed via Flatpak
+- name: Install Zed installation prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+    update_cache: true
   become: true
-  community.general.flatpak:
-    name: dev.zed.Zed
-    method: user
-    state: present
-  tags:
-    - zed
 
-- name: Setup alias for zed zsh
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'alias zed="flatpak run dev.zed.Zed"'
-    create: true
-    state: present
-  tags:
-    - zed
+- name: Check whether Zed is already installed
+  ansible.builtin.stat:
+    path: "{{ ansible_home }}/.local/bin/zed"
+  register: zed_binary
 
-- name: Inform user to reload shell
+- name: Install Zed for ansible user
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -f https://zed.dev/install.sh | sh
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_home }}/.local/bin/zed"
+  environment:
+    HOME: "{{ ansible_home }}"
+    USER: "{{ ansible_user }}"
+  become: true
+  become_user: "{{ ansible_user }}"
+  when: not zed_binary.stat.exists
+
+- name: Ensure Zed binary link is owned by workstation user
+  ansible.builtin.file:
+    path: "{{ ansible_home }}/.local/bin/zed"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: file
+  become: true
+
+- name: Check installed Zed version
+  ansible.builtin.command:
+    cmd: "{{ ansible_home }}/.local/bin/zed --version"
+  register: zed_version
+  changed_when: false
+  become: true
+  become_user: "{{ ansible_user }}"
+  environment:
+    HOME: "{{ ansible_home }}"
+
+- name: Display installed Zed version
   ansible.builtin.debug:
-    msg: "Alias created. Run 'source /home/omen/.zshrc' or restart your terminal to use 'zed'."
-  tags:
-    - zed
+    msg: "{{ zed_version.stdout }}"

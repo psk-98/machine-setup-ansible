@@ -1,0 +1,35 @@
+---
+- name: Install Ghostty prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+    update_cache: true
+  become: true
+
+- name: Check whether Ghostty is already installed
+  ansible.builtin.command:
+    cmd: ghostty +version
+  register: ghostty_check
+  changed_when: false
+  failed_when: false
+
+- name: Install Ghostty from ghostty-ubuntu
+  ansible.builtin.shell: |
+    set -o pipefail
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
+  args:
+    executable: /bin/bash
+  become: true
+  when: ghostty_check.rc != 0
+
+- name: Check installed Ghostty version
+  ansible.builtin.command:
+    cmd: ghostty +version
+  register: ghostty_version
+  changed_when: false
+
+- name: Display Ghostty version
+  ansible.builtin.debug:
+    msg: "{{ ghostty_version.stdout }}"

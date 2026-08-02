@@ -1,22 +1,53 @@
 ---
-- name: Check if Bun is already installed
-  ansible.builtin.command: bash -lc 'command -v bun'
-  register: bun_check
-  changed_when: false
-  failed_when: false
+- name: Install Bun prerequisites
+  ansible.builtin.apt:
+    name:
+      - curl
+      - unzip
+      - ca-certificates
+    state: present
+    update_cache: true
+  become: true
 
-- name: Install Bun with mise
+- name: Check whether Bun is already installed
+  ansible.builtin.stat:
+    path: "{{ ansible_user }}/.bun/bin/bun"
+  register: bun_binary
+
+- name: Install Bun for ansible user
   ansible.builtin.shell: |
-    mise use -g bun@latest
+    set -o pipefail
+    curl -fsSL https://bun.sh/install | bash
   args:
     executable: /bin/bash
-  when: bun_check.rc != 0
+    creates: "{{ ansible_user }}/.bun/bin/bun"
+  environment:
+    HOME: "{{ ansible_user }}"
+  become: true
+  become_user: "{{ ansible_user }}"
+  when: not bun_binary.stat.exists
 
-- name: Verify Bun
-  ansible.builtin.command: bash -lc 'bun --version'
+- name: Add Bun environment variables to Zsh
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_user }}/.zshrc"
+    create: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+    marker: "# {mark} ANSIBLE MANAGED BUN"
+    block: |
+      export BUN_INSTALL="$HOME/.bun"
+      export PATH="$BUN_INSTALL/bin:$PATH"
+  become: true
+
+- name: Get installed Bun version
+  ansible.builtin.command:
+    cmd: "{{ ansible_user }}/.bun/bin/bun --version"
   register: bun_version
   changed_when: false
+  become: true
+  become_user: "{{ ansible_user }}"
 
-- name: Show Bun version
+- name: Display Bun version
   ansible.builtin.debug:
-    var: bun_version.stdout
+    msg: "Bun version: {{ bun_version.stdout }}"

@@ -1,5 +1,6 @@
 ---
 - name: Install PHP 8.3 for Laravel development
+  become: true
   apt:
     name:
       - php8.3-cli

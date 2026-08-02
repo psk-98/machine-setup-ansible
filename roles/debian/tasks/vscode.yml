@@ -1,20 +1,85 @@
 ---
-- name: Install VS Code via Flatpak
-  become: true
-  community.general.flatpak:
-    name: com.visualstudio.code
+- name: Install VS Code repository prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gpg
     state: present
-    method: user
+    update_cache: true
+  become: true
 
-- name: Add VS Code Flatpak alias to zsh
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'alias code="flatpak run com.visualstudio.code"'
-    create: true
+- name: Detect Debian package architecture
+  ansible.builtin.command:
+    cmd: dpkg --print-architecture
+  register: vscode_architecture
+  changed_when: false
+
+- name: Download Microsoft repository signing key
+  ansible.builtin.get_url:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    dest: /tmp/microsoft.asc
     mode: "0644"
+  register: microsoft_key_download
+  become: true
 
-- name: Inform user to reload shell
+- name: Check Microsoft repository keyring
+  ansible.builtin.stat:
+    path: /usr/share/keyrings/microsoft.gpg
+  register: microsoft_keyring
+
+- name: Create Microsoft repository keyring
+  ansible.builtin.command:
+    cmd: >-
+      gpg --dearmor --yes
+      --output /usr/share/keyrings/microsoft.gpg
+      /tmp/microsoft.asc
+  when:
+    - microsoft_key_download.changed or not microsoft_keyring.stat.exists
+  become: true
+
+- name: Set Microsoft keyring permissions
+  ansible.builtin.file:
+    path: /usr/share/keyrings/microsoft.gpg
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Add official VS Code repository
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/vscode.sources
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      Types: deb
+      URIs: https://packages.microsoft.com/repos/code
+      Suites: stable
+      Components: main
+      Architectures: {{ vscode_architecture.stdout }}
+      Signed-By: /usr/share/keyrings/microsoft.gpg
+  register: vscode_repository
+  become: true
+
+- name: Update Apt cache after adding VS Code repository
+  ansible.builtin.apt:
+    update_cache: true
+  when: vscode_repository.changed
+  become: true
+
+- name: Install Visual Studio Code
+  ansible.builtin.apt:
+    name: code
+    state: present
+  become: true
+
+- name: Check Visual Studio Code version
+  ansible.builtin.command:
+    cmd: code --version
+  register: vscode_version
+  changed_when: false
+
+- name: Display Visual Studio Code version
   ansible.builtin.debug:
-    msg: "Alias created. Run 'source /home/omen/.bashrc' or 'source /home/omen/.zshrc' or restart your terminal to use 'vscode'."
-  tags:
-    - vscode
+    msg: "VS Code version: {{ vscode_version.stdout_lines[0] }}"

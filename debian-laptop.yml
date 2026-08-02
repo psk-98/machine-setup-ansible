@@ -1,5 +1,8 @@
 ---
 - name: "Setup debian personal machine"
   hosts: localhost
+  vars:
+    ansible_user: vagrant
+    ansible_home: "/home/{{ ansible_user }}"
   roles:
     - debian
